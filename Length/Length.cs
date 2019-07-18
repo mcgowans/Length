@@ -22,6 +22,21 @@ namespace Length
         /// <param name="lengthInMeters">The size of this <see cref="Length"/> in meters.</param>
         public Length(double lengthInMeters)
         {
+            if (double.IsNaN(lengthInMeters))
+            {
+                throw new ArgumentException("A length must be a valid positive number.");
+            }
+
+            if (lengthInMeters < 0)
+            {
+                throw new ArgumentException("A length must be positive.");
+            }
+
+            if (double.IsPositiveInfinity(lengthInMeters))
+            {
+                throw new ArgumentException("A length must be a positive, finite number.");
+            }
+
             this.lengthInMeters = lengthInMeters;
         }
 
@@ -46,6 +61,30 @@ namespace Length
         }
 
         /// <summary>
+        /// Determines if a <see cref="Length"/> instance in meters is equal to a given <c>double</c>.
+        /// </summary>
+        /// <param name="a">The first instance to compare.</param>
+        /// <param name="b">The <c>double</c> to compare to the <see cref="Length"/> in meters.</param>
+        /// <returns><c>true</c> if <c>a</c> and <c>b</c> represent the same value. Otherwise,
+        /// <c>false</c>.</returns>
+        public static bool operator ==(Length a, double b)
+        {
+            return a.LengthInMeters == b;
+        }
+
+        /// <summary>
+        /// Determines if a given <c>double</c> is equal to a <see cref="Length"/> instance in meters.
+        /// </summary>
+        /// <param name="a">The <c>double</c> to compare to the <see cref="Length"/> in meters.</param>
+        /// <param name="b">The <see cref="Length"/> instance to compare.</param>
+        /// <returns><c>true</c> if <c>a</c> and <c>b</c> represent the same value. Otherwise,
+        /// <c>false</c>.</returns>
+        public static bool operator ==(double a, Length b)
+        {
+            return a == b.LengthInMeters;
+        }
+
+        /// <summary>
         /// Determines if two <see cref="Length"/> instances are not equal.
         /// </summary>
         /// <param name="a">The first instance to compare.</param>
@@ -56,6 +95,42 @@ namespace Length
         {
             return !(a == b);
         }
+
+        /// <summary>
+        /// Determines if a <see cref="Length"/> instance in meters is not equal to a given <c>double</c>.
+        /// </summary>
+        /// <param name="a">The first instance to compare.</param>
+        /// <param name="b">The <c>double</c> to compare to the <see cref="Length"/> in meters.</param>
+        /// <returns><c>true</c> if <c>a</c> and <c>b</c> are not equal. Otherwise, <c>false</c>.
+        /// </returns>
+        public static bool operator !=(Length a, double b)
+        {
+            return !(a == b);
+        }
+
+        /// <summary>
+        /// Determines if a given <c>double</c> is not equal to a <see cref="Length"/> instance in meters.
+        /// </summary>
+        /// <param name="a">The <c>double</c> to compare to the <see cref="Length"/> in meters.</param>
+        /// <param name="b">The <see cref="Length"/> instance to compare.</param>
+        /// <returns><c>true</c> if <c>a</c> and <c>b</c> are not equal. Otherwise, <c>false</c>.
+        /// </returns>
+        public static bool operator !=(double a, Length b)
+        {
+            return !(a == b);
+        }
+
+        /// <summary>
+        /// Defines an implicit cast from a <see cref="Length"/> to a <c>double</c> value.
+        /// </summary>
+        /// <param name="l">The <see cref="Length"/> instance to cast to a <c>double</c>.</param>
+        public static implicit operator double(Length l) => l.LengthInMeters;
+
+        /// <summary>
+        /// Defines an explicit cast from a <c>double</c> to a <see cref="Length"/>.
+        /// </summary>
+        /// <param name="l">The <c>double</c> value to convert to a <see cref="Length"/> using meters.</param>
+        public static explicit operator Length(double l) => new Length(l);
 
         /// <summary>
         /// Compares the current <see cref="Length"/> with another, returning an integer that represents
