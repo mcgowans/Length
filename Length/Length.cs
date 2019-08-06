@@ -268,7 +268,7 @@ namespace Length
         /// just returns the length value unchanged.
         /// </summary>
         /// <param name="provider">This value is ignored.</param>
-        /// <returns>The value of this instance converted to a <c>decimal</c>.</returns>
+        /// <returns>The value of this instance converted to a <c>double</c>.</returns>
         public double ToDouble(IFormatProvider provider)
         {
             return this.LengthInMeters;
@@ -344,7 +344,50 @@ namespace Length
         /// <returns>The value of this instance converted to the given <see cref="Type"/>.</returns>
         public object ToType(Type conversionType, IFormatProvider provider)
         {
-            return Convert.ChangeType(this.LengthInMeters, conversionType, provider);
+            string msg = "Conversion from Length to {0} is not currently supported";
+
+            if (typeof(Length).Equals(conversionType))
+            {
+                return this;
+            }
+
+            switch (Type.GetTypeCode(conversionType))
+            {
+                case TypeCode.Boolean:
+                    return this.ToBoolean(provider);
+                case TypeCode.Byte:
+                    return this.ToByte(provider);
+                case TypeCode.Char:
+                    return this.ToChar(provider);
+                case TypeCode.DateTime:
+                    return this.ToDateTime(provider);
+                case TypeCode.Decimal:
+                    return this.ToDecimal(provider);
+                case TypeCode.Double:
+                    return this.ToDouble(provider);
+                case TypeCode.Int16:
+                    return this.ToInt16(provider);
+                case TypeCode.Int32:
+                    return this.ToInt32(provider);
+                case TypeCode.Int64:
+                    return this.ToInt64(provider);
+                case TypeCode.SByte:
+                    return this.ToSByte(provider);
+                case TypeCode.Single:
+                    return this.ToSingle(provider);
+                case TypeCode.String:
+                    return this.ToString(provider);
+                case TypeCode.UInt16:
+                    return this.ToUInt16(provider);
+                case TypeCode.UInt32:
+                    return this.ToUInt32(provider);
+                case TypeCode.UInt64:
+                    return this.ToUInt64(provider);
+                case TypeCode.Object:
+                    return (object)this.LengthInMeters;
+                default:
+                    throw new InvalidCastException(string.Format(msg, conversionType.Name));
+            }
         }
 
         /// <summary>

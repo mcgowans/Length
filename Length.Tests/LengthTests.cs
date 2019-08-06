@@ -6,6 +6,7 @@ namespace Length.Tests
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using Xunit;
 
     public class LengthTests
@@ -313,6 +314,250 @@ namespace Length.Tests
 
             Assert.False(l1.Equals(l2));
         }
+        #endregion
+
+        #region IConvertible
+        [Fact]
+        public void IConvertible_GetTypeCode_ReturnCorrectTypeCode()
+        {
+            Length l = new Length(1);
+            TypeCode tc = l.GetTypeCode();
+
+            Assert.Equal(TypeCode.Double, tc);
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(double.Epsilon)]
+        [InlineData(double.MaxValue)]
+        public void IConvertible_ToBoolean_IsTrue(double a)
+        {
+            Length l = new Length(a);
+            bool b = l.ToBoolean(null);
+
+            Assert.True(b);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        public void IConvertible_ToBoolean_IsFalse(double a)
+        {
+            Length l = new Length(a);
+            bool b = l.ToBoolean(null);
+
+            Assert.False(b);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(255)]
+        public void IConvertible_ToByteInRange_ConversionSuccessful(double a)
+        {
+            Length l = new Length(a);
+            byte b = l.ToByte(null);
+
+            Assert.Equal(a, (double)b);
+        }
+
+        [Theory]
+        [InlineData(double.Epsilon)]
+        [InlineData(0.5)]
+        [InlineData(255.1)]
+        public void IConvertible_ToByteInRange_ConversionRounded(double a)
+        {
+            Length l = new Length(a);
+            byte b = l.ToByte(null);
+
+            Assert.Equal((byte)a, b);
+        }
+
+        [Theory]
+        [InlineData(256)]
+        [InlineData(1000)]
+        [InlineData(double.MaxValue)]
+        public void IConvertible_ToByteOutOfRange_ThrowsOverflowException(double a)
+        {
+            Length l = new Length(a);
+            Assert.Throws<OverflowException>(() => l.ToByte(null));
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        public void IConvertible_ToChar_ThrowsInvalidCastException(double a)
+        {
+            Length l = new Length(a);
+            Assert.Throws<InvalidCastException>(() => l.ToChar(null));
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        public void IConvertible_ToDateTime_ThrowsInvalidCastException(double a)
+        {
+            Length l = new Length(a);
+            Assert.Throws<InvalidCastException>(() => l.ToDateTime(null));
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(200.25)]
+        public void IConvertible_ToDecimal_ConversionSuccessful(double a)
+        {
+            Length l = new Length(a);
+            decimal d = l.ToDecimal(null);
+
+            Assert.Equal(a, (double)d);
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(200.25)]
+        [InlineData(double.Epsilon)]
+        [InlineData(double.MaxValue)]
+        public void IConvertible_ToDouble_ConversionSuccessful(double a)
+        {
+            Length l = new Length(a);
+            double d = l.ToDouble(null);
+
+            Assert.Equal(a, d);
+        }
+
+        [Theory]
+        [InlineData(double.Epsilon)]
+        [InlineData(0.5)]
+        [InlineData(255.1)]
+        public void IConvertible_ToInt16InRange_ConversionRounded(double a)
+        {
+            Length l = new Length(a);
+            short i = l.ToInt16(null);
+
+            Assert.Equal((short)a, i);
+        }
+
+        [Theory]
+        [InlineData(short.MaxValue + 1.0)]
+        [InlineData(double.MaxValue)]
+        public void IConvertible_ToInt16OutOfRange_ThrowsOverflowException(double a)
+        {
+            Length l = new Length(a);
+            Assert.Throws<OverflowException>(() => l.ToInt16(null));
+        }
+
+        [Theory]
+        [InlineData(double.Epsilon)]
+        [InlineData(0.5)]
+        [InlineData(255.1)]
+        public void IConvertible_ToInt32InRange_ConversionRounded(double a)
+        {
+            Length l = new Length(a);
+            int i = l.ToInt32(null);
+
+            Assert.Equal((int)a, i);
+        }
+
+        [Theory]
+        [InlineData(int.MaxValue + 1.0)]
+        [InlineData(double.MaxValue)]
+        public void IConvertible_ToInt32OutOfRange_ThrowsOverflowException(double a)
+        {
+            Length l = new Length(a);
+            Assert.Throws<OverflowException>(() => l.ToInt32(null));
+        }
+
+        [Theory]
+        [InlineData(double.Epsilon)]
+        [InlineData(0.5)]
+        [InlineData(1024.5)]
+        public void IConvertible_ToInt64InRange_ConversionRounded(double a)
+        {
+            Length l = new Length(a);
+            long i = l.ToInt64(null);
+
+            Assert.Equal((int)a, i);
+        }
+
+        [Theory]
+        [InlineData(long.MaxValue + 1.0)]
+        [InlineData(double.MaxValue)]
+        public void IConvertible_ToInt64OutOfRange_ThrowsOverflowException(double a)
+        {
+            Length l = new Length(a);
+            Assert.Throws<OverflowException>(() => l.ToInt64(null));
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(sbyte.MaxValue)]
+        public void IConvertible_ToSByteInRange_ConversionSuccessful(double a)
+        {
+            Length l = new Length(a);
+            sbyte b = l.ToSByte(null);
+
+            Assert.Equal(a, (double)b);
+        }
+
+        [Theory]
+        [InlineData(double.Epsilon)]
+        [InlineData(0.5)]
+        [InlineData(127.1)]
+        public void IConvertible_ToSByteInRange_ConversionRounded(double a)
+        {
+            Length l = new Length(a);
+            sbyte b = l.ToSByte(null);
+
+            Assert.Equal((sbyte)a, b);
+        }
+
+        [Theory]
+        [InlineData(sbyte.MaxValue + 1.0)]
+        [InlineData(1000)]
+        [InlineData(double.MaxValue)]
+        public void IConvertible_ToSByteOutOfRange_ThrowsOverflowException(double a)
+        {
+            Length l = new Length(a);
+            Assert.Throws<OverflowException>(() => l.ToSByte(null));
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(200.25)]
+        [InlineData(float.MaxValue)]
+        public void IConvertible_ToSingle_ConversionSuccessful(double a)
+        {
+            Length l = new Length(a);
+            float f = l.ToSingle(null);
+
+            Assert.Equal(a, (double)f);
+        }
+
+        [Theory]
+        [InlineData(0.5, "de-DE", "0,5")]
+        [InlineData(0.5, "en-US", "0.5")]
+        public void IConvertible_ToString_FormatCorrectly(double a, string provider, string expected)
+        {
+            IFormatProvider p = CultureInfo.GetCultureInfo(provider).NumberFormat;
+            Length l = new Length(a);
+            string s = l.ToString(p);
+            Assert.Equal(expected, s);
+        }
+
+        [Theory]
+        [InlineData(double.Epsilon, typeof(double))]
+        [InlineData(0.0, typeof(float))]
+        [InlineData(int.MaxValue, typeof(int))]
+        [InlineData(int.MaxValue, typeof(object))]
+        public void IConvertible_ToType_ConversionSuccessful(double a, Type t)
+        {
+            Length l = new Length(a);
+            object o1 = l.ToType(t, null);
+            object o2 = Convert.ChangeType(a, t);
+
+            Assert.Equal(o1, o2);
+        }
+
         #endregion
     }
 }
