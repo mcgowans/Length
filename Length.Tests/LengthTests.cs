@@ -5,6 +5,7 @@
 namespace Length.Tests
 {
     using System;
+    using System.Collections.Generic;
     using Xunit;
 
     public class LengthTests
@@ -194,6 +195,69 @@ namespace Length.Tests
             Length l = (Length)a;
 
             Assert.Equal(a, l.LengthInMeters);
+        }
+        #endregion
+
+        #region IComparable
+        [Theory]
+        [InlineData(1, 2)]
+        [InlineData(0, 20)]
+        [InlineData(double.Epsilon, double.MaxValue)]
+        public void IComparable_CompareTwoLengths_FirstIsLess(double a, double b)
+        {
+            Length l1 = new Length(a);
+            Length l2 = new Length(b);
+
+            Assert.True(l1 < l2);
+        }
+
+        [Theory]
+        [InlineData(2, 1)]
+        [InlineData(20, 0)]
+        [InlineData(double.MaxValue, double.Epsilon)]
+        public void IComparable_CompareTwoLengths_FirstIsMore(double a, double b)
+        {
+            Length l1 = new Length(a);
+            Length l2 = new Length(b);
+
+            Assert.True(l1 > l2);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(2)]
+        [InlineData(20)]
+        [InlineData(double.MaxValue)]
+        [InlineData(double.Epsilon)]
+        public void IComparable_CompareTwoLengths_BothEqual(double a)
+        {
+            Length l1 = new Length(a);
+            Length l2 = new Length(a);
+            int cmp = l1.CompareTo(l2);
+
+            Assert.True(cmp == 0);
+        }
+
+        [Theory]
+        [InlineData(1, 2, 3)]
+        [InlineData(3, 2, 1)]
+        [InlineData(1, 1, 1)]
+        [InlineData(1, double.MaxValue, double.Epsilon)]
+        public void IComparable_SortThreeValues_SortedCorrectly(double a, double b, double c)
+        {
+            List<Length> lengths = new List<Length>();
+            lengths.Add((Length)a);
+            lengths.Add((Length)b);
+            lengths.Add((Length)c);
+            lengths.Sort();
+
+            double current = lengths[0];
+
+            foreach(Length l in lengths)
+            {
+                Assert.True(current <= l);
+                current = l;
+            }
         }
         #endregion
     }

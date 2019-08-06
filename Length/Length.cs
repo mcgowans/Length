@@ -12,11 +12,6 @@ namespace Length
     public struct Length : IComparable, IComparable<Length>, IEquatable<Length>, IConvertible
     {
         /// <summary>
-        /// Internal storage of this length expressed in meters.
-        /// </summary>
-        private readonly double lengthInMeters;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="Length"/> struct expressed in meters.
         /// </summary>
         /// <param name="lengthInMeters">The size of this <see cref="Length"/> in meters.</param>
@@ -37,16 +32,13 @@ namespace Length
                 throw new ArgumentException("A length must be a positive, finite number.");
             }
 
-            this.lengthInMeters = lengthInMeters;
+            this.LengthInMeters = lengthInMeters;
         }
 
         /// <summary>
         /// Gets the value of this <see cref="Length"/> expressed in meters.
         /// </summary>
-        public double LengthInMeters
-        {
-            get { return this.lengthInMeters; }
-        }
+        public double LengthInMeters { get; }
 
         /// <summary>
         /// Determines if two <see cref="Length"/> instances are equal.
