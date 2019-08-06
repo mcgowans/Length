@@ -260,5 +260,59 @@ namespace Length.Tests
             }
         }
         #endregion
+
+        #region IEquatable
+        [Theory]
+        [InlineData(0)]
+        [InlineData(2)]
+        [InlineData(20)]
+        [InlineData(double.MaxValue)]
+        [InlineData(double.Epsilon)]
+        public void IEquatable_CompareTwoLengths_BothEqual(double a)
+        {
+            Length l1 = new Length(a);
+            Length l2 = new Length(a);
+
+            Assert.True(l1.Equals(l2));
+        }
+
+        [Theory]
+        [InlineData(1, 2)]
+        [InlineData(0, 20)]
+        [InlineData(double.Epsilon, double.MaxValue)]
+        public void IEquatable_CompareTwoLengths_NotEqual(double a, double b)
+        {
+            Length l1 = new Length(a);
+            Length l2 = new Length(b);
+
+            Assert.False(l1.Equals(l2));
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(2)]
+        [InlineData(20)]
+        [InlineData(double.MaxValue)]
+        [InlineData(double.Epsilon)]
+        public void IEquatable_CompareLengthWithObject_BothEqual(double a)
+        {
+            Length l1 = new Length(a);
+            object l2 = new Length(a);
+
+            Assert.True(l1.Equals(l2));
+        }
+
+        [Theory]
+        [InlineData(1, 2)]
+        [InlineData(0, 20)]
+        [InlineData(double.Epsilon, double.MaxValue)]
+        public void IEquatable_CompareLengthWithObject_NotEqual(double a, double b)
+        {
+            Length l1 = new Length(a);
+            object l2 = new Length(b);
+
+            Assert.False(l1.Equals(l2));
+        }
+        #endregion
     }
 }
