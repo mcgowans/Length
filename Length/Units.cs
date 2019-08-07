@@ -1,4 +1,4 @@
-﻿// <copyright file="Unit.cs" company="McGowans Print">
+﻿// <copyright file="Units.cs" company="McGowans Print">
 // Copyright (c) McGowans Print. All rights reserved.
 // </copyright>
 

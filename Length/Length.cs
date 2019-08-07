@@ -33,8 +33,8 @@ namespace LengthLib
                 throw new ArgumentException("A length must be a positive, finite number.");
             }
 
-            Units = units == null ? LengthLib.Units.Meters : units;
-            this.LengthInMeters = length * Units.Multiplier;
+            this.Units = units ?? LengthLib.Units.Meters;
+            this.LengthInMeters = length * this.Units.Multiplier;
             this.Value = length;
         }
 
@@ -131,6 +131,92 @@ namespace LengthLib
         public static bool operator !=(double a, Length b)
         {
             return !(a == b);
+        }
+
+        /// <summary>
+        /// Adds two <see cref="Length"/> instances to produce a new value.
+        /// </summary>
+        /// <param name="a">The first <see cref="Length"/> to add.</param>
+        /// <param name="b">The second <see cref="Length"/> to add.</param>
+        /// <returns>A new <see cref="Length"/> value representing the addition of both inputs.</returns>
+        /// <remarks>If both inputs use the same units, this will carry through to the result.
+        /// Otherwise, the result will be calculated in meters.</remarks>
+        public static Length operator +(Length a, Length b)
+        {
+            if (a.Units == b.Units)
+            {
+                return new Length(a.Value + b.Value, a.Units);
+            }
+
+            return new Length(a.LengthInMeters + b.LengthInMeters);
+        }
+
+        /// <summary>
+        /// Subtracts one <see cref="Length"/> instance from another to produce a new value.
+        /// </summary>
+        /// <param name="a">The first <see cref="Length"/> instance.</param>
+        /// <param name="b">The second <see cref="Length"/> to subtract from the first.</param>
+        /// <returns>A new <see cref="Length"/> value representing the subtraction of both inputs.</returns>
+        /// <remarks>If both inputs use the same units, this will carry through to the result.
+        /// Otherwise, the result will be calculated in meters.</remarks>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="b"/> is greater than
+        /// <paramref name="a"/>, as this would result in an invalid, negative <see cref="Length"/>.</exception>
+        public static Length operator -(Length a, Length b)
+        {
+            if (a < b)
+            {
+                throw new ArgumentException("Cannot subtract lengths as it would generate a negative result.");
+            }
+
+            if (a.Units == b.Units)
+            {
+                return new Length(a.Value - b.Value, a.Units);
+            }
+
+            return new Length(a.LengthInMeters - b.LengthInMeters);
+        }
+
+        /// <summary>
+        /// Multiplies two <see cref="Length"/> instances to produce a new value.
+        /// </summary>
+        /// <param name="a">The first <see cref="Length"/> to multiply.</param>
+        /// <param name="b">The second <see cref="Length"/> to multiply.</param>
+        /// <returns>A new <see cref="Length"/> value representing the multiplication of both inputs.</returns>
+        /// <remarks>If both inputs use the same units, this will carry through to the result.
+        /// Otherwise, the result will be calculated in meters.</remarks>
+        public static Length operator *(Length a, Length b)
+        {
+            if (a.Units == b.Units)
+            {
+                return new Length(a.Value * b.Value, a.Units);
+            }
+
+            return new Length(a.LengthInMeters * b.LengthInMeters);
+        }
+
+        /// <summary>
+        /// Divides two <see cref="Length"/> instances to produce a new value.
+        /// </summary>
+        /// <param name="a">The first <see cref="Length"/> to divide.</param>
+        /// <param name="b">The second <see cref="Length"/> to divide the first input by.</param>
+        /// <returns>A new <see cref="Length"/> value representing the division of both inputs.</returns>
+        /// <remarks>If both inputs use the same units, this will carry through to the result.
+        /// Otherwise, the result will be calculated in meters.</remarks>
+        /// <exception cref="DivideByZeroException">Thrown if attempting to divide <paramref name="a"/>
+        /// by a zero <see cref="Length"/>.</exception>
+        public static Length operator /(Length a, Length b)
+        {
+            if (b == 0)
+            {
+                throw new DivideByZeroException("Cannot divide a Length by zero.");
+            }
+
+            if (a.Units == b.Units)
+            {
+                return new Length(a.Value / b.Value, a.Units);
+            }
+
+            return new Length(a.LengthInMeters / b.LengthInMeters);
         }
 
         /// <summary>

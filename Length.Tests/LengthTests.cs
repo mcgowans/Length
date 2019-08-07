@@ -89,7 +89,7 @@ namespace LengthLib.Tests
 
             double meters = length / 39.3700787401;
             if (meters > 0.0)
-                Assert.Equal(1.0, meters / l.LengthInMeters,  5);
+                Assert.Equal(1.0, meters / l.LengthInMeters, 5);
         }
         #endregion
 
@@ -237,6 +237,244 @@ namespace LengthLib.Tests
         }
         #endregion
 
+        #region Binary Operators
+        [Theory]
+        [InlineData(0, 0)]
+        [InlineData(0.5, 0.5)]
+        [InlineData(123.45, 123.45)]
+        public void AdditionOperator_AddTwoMeterLengths_GetMeterResult(double a, double b)
+        {
+            double expected = a + b;
+            Length l1 = new Length(a);
+            Length l2 = new Length(b);
+            Length result = l1 + l2;
+
+            Assert.Equal(expected, result.LengthInMeters);
+            Assert.Equal(expected, result.Value);
+            Assert.Equal(Units.Meters, result.Units);
+        }
+
+        [Theory]
+        [InlineData(0, 0)]
+        [InlineData(0.5, 0.5)]
+        [InlineData(123.45, 123.45)]
+        public void AdditionOperator_AddMeterLengthToCentimeter_GetMeterResult(double a, double b)
+        {
+            double expected = a + (b / 100);
+            Length l1 = new Length(a);
+            Length l2 = new Length(b, Units.Centimeters);
+            Length result = l1 + l2;
+
+            Assert.Equal(expected, result.LengthInMeters);
+            Assert.Equal(expected, result.Value);
+            Assert.Equal(Units.Meters, result.Units);
+        }
+
+        [Theory]
+        [InlineData(0, 0)]
+        [InlineData(0.5, 0.5)]
+        [InlineData(123.45, 123.45)]
+        public void AdditionOperator_AddTwoInchLengths_GetInchesResult(double a, double b)
+        {
+            double expected = a + b;
+            Length l1 = new Length(a, Units.Inches);
+            Length l2 = new Length(b, Units.Inches);
+            Length result = l1 + l2;
+
+            Assert.Equal(expected, result.Value);
+            Assert.Equal(Units.Inches, result.Units);
+        }
+
+        [Theory]
+        [InlineData(0, 0)]
+        [InlineData(0.5, 0.5)]
+        [InlineData(123.45, 123.45)]
+        [InlineData(10, 5)]
+        public void SubtractionOperator_SubtractTwoMeterLengths_GetMeterResult(double a, double b)
+        {
+            double expected = a - b;
+            Length l1 = new Length(a);
+            Length l2 = new Length(b);
+            Length result = l1 - l2;
+
+            Assert.Equal(expected, result.LengthInMeters);
+            Assert.Equal(expected, result.Value);
+            Assert.Equal(Units.Meters, result.Units);
+        }
+
+        [Theory]
+        [InlineData(0, 0)]
+        [InlineData(50, 0.5)]
+        [InlineData(100, 0.25)]
+        public void SubtractionOperator_SubtractMeterLengthFromCentimeters_GetMeterResult(double a, double b)
+        {
+            double expected = (a / 100) - b;
+            Length l1 = new Length(a, Units.Centimeters);
+            Length l2 = new Length(b);
+            Length result = l1 - l2;
+
+            Assert.Equal(expected, result.LengthInMeters);
+            Assert.Equal(expected, result.Value);
+            Assert.Equal(Units.Meters, result.Units);
+        }
+
+        [Theory]
+        [InlineData(0, 0)]
+        [InlineData(0.5, 0.5)]
+        [InlineData(123.45, 123.45)]
+        [InlineData(10, 5)]
+        public void SubtractionOperator_SubtractTwoInchLengths_GetInchesResult(double a, double b)
+        {
+            double expected = a - b;
+            Length l1 = new Length(a, Units.Inches);
+            Length l2 = new Length(b, Units.Inches);
+            Length result = l1 - l2;
+
+            Assert.Equal(expected, result.Value);
+            Assert.Equal(Units.Inches, result.Units);
+        }
+
+        [Theory]
+        [InlineData(0, 1)]
+        [InlineData(0.5, 0.51)]
+        [InlineData(0, double.MaxValue)]
+        public void SubtractionOperator_SubtractLargerLengthFromSmaller_ThrowsArgumentException(double a, double b)
+        {
+            Length l1 = new Length(a);
+            Length l2 = new Length(b);
+            Assert.Throws<ArgumentException>(() => l1 - l2);
+        }
+
+        [Theory]
+        [InlineData(3.9, 100)]
+        [InlineData(1000, 25401)]
+        [InlineData(10, double.MaxValue)]
+        public void SubtractionOperator_SubtractLargerLengthFromSmallerDifferentUnits_ThrowsArgumentException(double a, double b)
+        {
+            Length l1 = new Length(a, Units.Inches);
+            Length l2 = new Length(b, Units.Millimeters);
+            Assert.Throws<ArgumentException>(() => l1 - l2);
+        }
+
+        [Theory]
+        [InlineData(0, 0)]
+        [InlineData(0.5, 0.5)]
+        [InlineData(123.45, 678)]
+        public void MultiplicationOperator_MultiplyTwoMeterLengths_GetMeterResult(double a, double b)
+        {
+            double expected = a * b;
+            Length l1 = new Length(a);
+            Length l2 = new Length(b);
+            Length result = l1 * l2;
+
+            Assert.Equal(expected, result.LengthInMeters);
+            Assert.Equal(expected, result.Value);
+            Assert.Equal(Units.Meters, result.Units);
+        }
+
+        [Theory]
+        [InlineData(0, 0)]
+        [InlineData(0.5, 0.5)]
+        [InlineData(123.5, 123.5)]
+        public void MultiplicationOperator_MultiplyMeterLengthToCentimeter_GetMeterResult(double a, double b)
+        {
+            double expected = a * (b / 100);
+            Length l1 = new Length(a);
+            Length l2 = new Length(b, Units.Centimeters);
+            Length result = l1 * l2;
+
+            Assert.Equal(expected, result.LengthInMeters);
+            Assert.Equal(expected, result.Value);
+            Assert.Equal(Units.Meters, result.Units);
+        }
+
+        [Theory]
+        [InlineData(0, 0)]
+        [InlineData(0.5, 0.5)]
+        [InlineData(123.45, 123.45)]
+        public void MultiplicationOperator_MultiplyTwoInchLengths_GetInchesResult(double a, double b)
+        {
+            double expected = a * b;
+            Length l1 = new Length(a, Units.Inches);
+            Length l2 = new Length(b, Units.Inches);
+            Length result = l1 * l2;
+
+            Assert.Equal(expected, result.Value);
+            Assert.Equal(Units.Inches, result.Units);
+        }
+
+        [Theory]
+        [InlineData(0, 1)]
+        [InlineData(0.5, 0.5)]
+        [InlineData(123.45, 123.45)]
+        [InlineData(10, 5)]
+        public void DivisionOperator_DivideTwoMeterLengths_GetMeterResult(double a, double b)
+        {
+            double expected = a / b;
+            Length l1 = new Length(a);
+            Length l2 = new Length(b);
+            Length result = l1 / l2;
+
+            Assert.Equal(expected, result.LengthInMeters);
+            Assert.Equal(expected, result.Value);
+            Assert.Equal(Units.Meters, result.Units);
+        }
+
+        [Theory]
+        [InlineData(0, 1)]
+        [InlineData(50, 0.5)]
+        [InlineData(100, 0.25)]
+        public void DivisionOperator_DivideMeterLengthFromCentimeters_GetMeterResult(double a, double b)
+        {
+            double expected = (a / 100) / b;
+            Length l1 = new Length(a, Units.Centimeters);
+            Length l2 = new Length(b);
+            Length result = l1 / l2;
+
+            Assert.Equal(expected, result.LengthInMeters);
+            Assert.Equal(expected, result.Value);
+            Assert.Equal(Units.Meters, result.Units);
+        }
+
+        [Theory]
+        [InlineData(0, 1)]
+        [InlineData(0.5, 0.5)]
+        [InlineData(123.45, 123.45)]
+        [InlineData(10, 5)]
+        public void DivisionOperator_DivideTwoInchLengths_GetInchesResult(double a, double b)
+        {
+            double expected = a / b;
+            Length l1 = new Length(a, Units.Inches);
+            Length l2 = new Length(b, Units.Inches);
+            Length result = l1 / l2;
+
+            Assert.Equal(expected, result.Value);
+            Assert.Equal(Units.Inches, result.Units);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(0.5)]
+        [InlineData(double.MaxValue)]
+        public void DivisionOperator_DivideByZero_ThrowsDivideByZeroException(double a)
+        {
+            Length l1 = new Length(a);
+            Length l2 = new Length(0);
+            Assert.Throws<DivideByZeroException>(() => l1 / l2);
+        }
+
+        [Theory]
+        [InlineData(3.9)]
+        [InlineData(1000)]
+        [InlineData(double.MaxValue)]
+        public void DivisionOperator_DivideByZeroDifferentUnits_ThrowsDivideByZeroException(double a)
+        {
+            Length l1 = new Length(a, Units.Inches);
+            Length l2 = new Length(0, Units.Millimeters);
+            Assert.Throws<DivideByZeroException>(() => l1 / l2);
+        }
+        #endregion
+
         #region Casting
         [Theory]
         [InlineData(0, 10)]
@@ -317,15 +555,17 @@ namespace LengthLib.Tests
         [InlineData(1, double.MaxValue, double.Epsilon)]
         public void IComparable_SortThreeValues_SortedCorrectly(double a, double b, double c)
         {
-            List<Length> lengths = new List<Length>();
-            lengths.Add((Length)a);
-            lengths.Add((Length)b);
-            lengths.Add((Length)c);
+            List<Length> lengths = new List<Length>
+            {
+                (Length)a,
+                (Length)b,
+                (Length)c
+            };
             lengths.Sort();
 
             double current = lengths[0];
 
-            foreach(Length l in lengths)
+            foreach (Length l in lengths)
             {
                 Assert.True(current <= l);
                 current = l;
