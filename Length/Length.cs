@@ -2,7 +2,7 @@
 // Copyright (c) McGowans Print. All rights reserved.
 // </copyright>
 
-namespace Length
+namespace LengthLib
 {
     using System;
 
@@ -12,33 +12,48 @@ namespace Length
     public struct Length : IComparable, IComparable<Length>, IEquatable<Length>, IConvertible
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Length"/> struct expressed in meters.
+        /// Initializes a new instance of the <see cref="Length"/> struct expressed in the given units.
         /// </summary>
-        /// <param name="lengthInMeters">The size of this <see cref="Length"/> in meters.</param>
-        public Length(double lengthInMeters)
+        /// <param name="length">The size of this <see cref="Length"/> in the given units.</param>
+        /// <param name="units">The <see cref="Unit"/> to express this value in.</param>
+        public Length(double length, Unit units)
         {
-            if (double.IsNaN(lengthInMeters))
+            if (double.IsNaN(length))
             {
                 throw new ArgumentException("A length must be a valid positive number.");
             }
 
-            if (lengthInMeters < 0)
+            if (length < 0)
             {
                 throw new ArgumentException("A length must be positive.");
             }
 
-            if (double.IsPositiveInfinity(lengthInMeters))
+            if (double.IsPositiveInfinity(length))
             {
                 throw new ArgumentException("A length must be a positive, finite number.");
             }
 
-            this.LengthInMeters = lengthInMeters;
+            Units = units == null ? LengthLib.Units.Meters : units;
+            this.LengthInMeters = length * Units.Multiplier;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Length"/> struct expressed in meters.
+        /// </summary>
+        /// <param name="lengthInMeters">The size of this <see cref="Length"/> in meters.</param>
+        public Length(double lengthInMeters) : this(lengthInMeters, null)
+        {
         }
 
         /// <summary>
         /// Gets the value of this <see cref="Length"/> expressed in meters.
         /// </summary>
         public double LengthInMeters { get; }
+
+        /// <summary>
+        /// Gets the unit to use for this <see cref="Length"/>.
+        /// </summary>
+        public Unit Units { get; }
 
         /// <summary>
         /// Determines if two <see cref="Length"/> instances are equal.

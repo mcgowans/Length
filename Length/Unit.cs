@@ -2,7 +2,7 @@
 // Copyright (c) McGowans Print. All rights reserved.
 // </copyright>
 
-namespace Length
+namespace LengthLib
 {
     using System;
     using System.Collections.Generic;

@@ -2,7 +2,7 @@
 // Copyright (c) McGowans Print. All rights reserved.
 // </copyright>
 
-namespace Length.Tests
+namespace LengthLib.Tests
 {
     using System;
     using System.Collections.Generic;
