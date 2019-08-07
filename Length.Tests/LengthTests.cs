@@ -46,6 +46,51 @@ namespace LengthLib.Tests
         {
             Assert.Throws<ArgumentException>(() => new Length(double.PositiveInfinity));
         }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(0.1)]
+        [InlineData(1)]
+        [InlineData(100000)]
+        [InlineData(double.MaxValue)]
+        [InlineData(double.Epsilon)]
+        public void Constructor_SetsPositiveLengthInCentimetres_LengthAsSupplied(double length)
+        {
+            Length l = new Length(length, Units.Centimeters);
+            Assert.Equal(length, l.Value);
+            Assert.Equal(length / 100, l.LengthInMeters);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(0.1)]
+        [InlineData(1)]
+        [InlineData(100000)]
+        [InlineData(double.MaxValue)]
+        [InlineData(double.Epsilon)]
+        public void Constructor_SetsPositiveLengthInMillimetres_LengthAsSupplied(double length)
+        {
+            Length l = new Length(length, Units.Millimeters);
+            Assert.Equal(length, l.Value);
+            Assert.Equal(length / 1000, l.LengthInMeters);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(0.1)]
+        [InlineData(1)]
+        [InlineData(100000)]
+        [InlineData(double.MaxValue)]
+        [InlineData(double.Epsilon)]
+        public void Constructor_SetsPositiveLengthInInches_LengthAsSupplied(double length)
+        {
+            Length l = new Length(length, Units.Inches);
+            Assert.Equal(length, l.Value);
+
+            double meters = length / 39.3700787401;
+            if (meters > 0.0)
+                Assert.Equal(1.0, meters / l.LengthInMeters,  5);
+        }
         #endregion
 
         #region Equality Operators
@@ -60,6 +105,32 @@ namespace LengthLib.Tests
         {
             Length l1 = new Length(l);
             Length l2 = new Length(l);
+
+            Assert.True(l1 == l2);
+        }
+
+        [Theory]
+        [InlineData(0, 0)]
+        [InlineData(0.1, 10.0)]
+        [InlineData(1, 100)]
+        [InlineData(100000, 10000000)]
+        public void EqualityOperator_CompareTwoEqualLengthsMetersVsCentimeters_ValuesAreEqual(double m, double cm)
+        {
+            Length l1 = new Length(m);
+            Length l2 = new Length(cm, Units.Centimeters);
+
+            Assert.True(l1 == l2);
+        }
+
+        [Theory]
+        [InlineData(0, 0)]
+        [InlineData(0.1, 100.0)]
+        [InlineData(1, 1000)]
+        [InlineData(100000, 100000000)]
+        public void EqualityOperator_CompareTwoEqualLengthsMetersVsMillimeters_ValuesAreEqual(double m, double mm)
+        {
+            Length l1 = new Length(m);
+            Length l2 = new Length(mm, Units.Millimeters);
 
             Assert.True(l1 == l2);
         }

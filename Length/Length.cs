@@ -35,6 +35,7 @@ namespace LengthLib
 
             Units = units == null ? LengthLib.Units.Meters : units;
             this.LengthInMeters = length * Units.Multiplier;
+            this.Value = length;
         }
 
         /// <summary>
@@ -54,6 +55,11 @@ namespace LengthLib
         /// Gets the unit to use for this <see cref="Length"/>.
         /// </summary>
         public Unit Units { get; }
+
+        /// <summary>
+        /// Gets the value of this <see cref="Length"/> expressed in the given units.
+        /// </summary>
+        public double Value { get; }
 
         /// <summary>
         /// Determines if two <see cref="Length"/> instances are equal.
