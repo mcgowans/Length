@@ -4,10 +4,6 @@
 
 namespace LengthLib
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-
     /// <summary>
     /// Represents a unit of physical measurement.
     /// </summary>

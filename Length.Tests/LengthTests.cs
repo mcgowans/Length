@@ -237,6 +237,86 @@ namespace LengthLib.Tests
         }
         #endregion
 
+        #region Unary Operators
+        [Theory]
+        [InlineData(0)]
+        [InlineData(0.5)]
+        [InlineData(123.45)]
+        public void IncrementOperator_IncrementMeterLengths_GetMeterResult(double a)
+        {
+            double expected = a;
+            expected++;
+
+            Length l1 = new Length(a);
+            Length result = ++l1;
+
+            Assert.Equal(expected, result.LengthInMeters);
+            Assert.Equal(expected, result.Value);
+            Assert.Equal(Units.Meters, result.Units);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(0.5)]
+        [InlineData(123.4)]
+        public void IncrementOperator_IncrementCentimeterLengths_GetMeterAndCentimeterResult(double a)
+        {
+            double expectedCm = a;
+            expectedCm++;
+            double expectedM = expectedCm / 100;
+
+            Length l1 = new Length(a, Units.Centimeters);
+            Length result = ++l1;
+
+            Assert.Equal(expectedCm, result.Value);
+            Assert.Equal(expectedM, result.LengthInMeters);
+            Assert.Equal(Units.Centimeters, result.Units);
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(1.5)]
+        [InlineData(123.45)]
+        [InlineData(10)]
+        public void DecrementOperator_DecrementMeterLength_GetMeterResult(double a)
+        {
+            double expected = a;
+            expected--;
+            Length l1 = new Length(a);
+            Length result = --l1;
+
+            Assert.Equal(expected, result.LengthInMeters);
+            Assert.Equal(expected, result.Value);
+            Assert.Equal(Units.Meters, result.Units);
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(50)]
+        [InlineData(100.5)]
+        public void DecrementOperator_DecrementCentimeterLengths_GetMeterAndCentimeterResult(double a)
+        {
+            double expectedCm = a;
+            expectedCm--;
+            double expectedM = expectedCm / 100;
+            Length l1 = new Length(a, Units.Centimeters);
+            Length result = --l1;
+
+            Assert.Equal(expectedM, result.LengthInMeters);
+            Assert.Equal(expectedCm, result.Value);
+            Assert.Equal(Units.Centimeters, result.Units);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(0.5)]
+        public void DecrementOperator_DecrementValueLessThanOne_ThrowsArgumentException(double a)
+        {
+            Length l1 = new Length(a);
+            Assert.Throws<ArgumentException>(() => --l1);
+        }
+        #endregion
+
         #region Binary Operators
         [Theory]
         [InlineData(0, 0)]

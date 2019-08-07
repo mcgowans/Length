@@ -4,10 +4,6 @@
 
 namespace LengthLib
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-
     /// <summary>
     /// Provides predefined units for convenience.
     /// </summary>

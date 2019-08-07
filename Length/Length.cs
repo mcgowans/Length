@@ -11,6 +11,7 @@ namespace LengthLib
     /// </summary>
     public struct Length : IComparable, IComparable<Length>, IEquatable<Length>, IConvertible
     {
+        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="Length"/> struct expressed in the given units.
         /// </summary>
@@ -45,7 +46,9 @@ namespace LengthLib
         public Length(double lengthInMeters) : this(lengthInMeters, null)
         {
         }
+        #endregion
 
+        #region Properties
         /// <summary>
         /// Gets the value of this <see cref="Length"/> expressed in meters.
         /// </summary>
@@ -60,7 +63,9 @@ namespace LengthLib
         /// Gets the value of this <see cref="Length"/> expressed in the given units.
         /// </summary>
         public double Value { get; }
+        #endregion
 
+        #region Equality Operators
         /// <summary>
         /// Determines if two <see cref="Length"/> instances are equal.
         /// </summary>
@@ -132,7 +137,37 @@ namespace LengthLib
         {
             return !(a == b);
         }
+        #endregion
 
+        #region Unary Operators
+        /// <summary>
+        /// Increments a <see cref="Length"/> instance by one unit to produce a new value.
+        /// </summary>
+        /// <param name="a">The <see cref="Length"/> to increment by one unit.</param>
+        /// <returns>A new <see cref="Length"/> value that's 1 greater than the input value.</returns>
+        public static Length operator ++(Length a)
+        {
+            double newLength = a.Value;
+            newLength++;
+
+            return new Length(newLength, a.Units);
+        }
+
+        /// <summary>
+        /// Decrement a <see cref="Length"/> instance by one unit to produce a new value.
+        /// </summary>
+        /// <param name="a">The <see cref="Length"/> to decrement by one unit.</param>
+        /// <returns>A new <see cref="Length"/> value that's 1 less than the input value.</returns>
+        public static Length operator --(Length a)
+        {
+            double newLength = a.Value;
+            newLength--;
+
+            return new Length(newLength, a.Units);
+        }
+        #endregion
+
+        #region Binary Operators
         /// <summary>
         /// Adds two <see cref="Length"/> instances to produce a new value.
         /// </summary>
@@ -218,7 +253,9 @@ namespace LengthLib
 
             return new Length(a.LengthInMeters / b.LengthInMeters);
         }
+        #endregion
 
+        #region Casting
         /// <summary>
         /// Defines an implicit cast from a <see cref="Length"/> to a <c>double</c> value.
         /// </summary>
@@ -230,7 +267,9 @@ namespace LengthLib
         /// </summary>
         /// <param name="l">The <c>double</c> value to convert to a <see cref="Length"/> using meters.</param>
         public static explicit operator Length(double l) => new Length(l);
+        #endregion
 
+        #region IComparable
         /// <summary>
         /// Compares the current <see cref="Length"/> with another, returning an integer that represents
         /// whether this value precedes, follows, or occurs in the same position as the other value.
@@ -267,7 +306,9 @@ namespace LengthLib
                 throw new ArgumentException("Object is not a Length");
             }
         }
+        #endregion
 
+        #region IEquatable
         /// <summary>
         /// Determines if this <see cref="Length"/> value is equal to another object.
         /// </summary>
@@ -289,7 +330,9 @@ namespace LengthLib
         {
             return this == other;
         }
+        #endregion
 
+        #region Overrides
         /// <summary>
         /// Returns the hash code for this instance.
         /// </summary>
@@ -307,7 +350,9 @@ namespace LengthLib
         {
             return this.LengthInMeters.ToString();
         }
+        #endregion
 
+        #region IConvertible
         /// <summary>
         /// Obtains the type code for this <see cref="Length"/> instance.
         /// </summary>
@@ -526,5 +571,6 @@ namespace LengthLib
         {
             return Convert.ToUInt64(this.LengthInMeters);
         }
+        #endregion
     }
 }
