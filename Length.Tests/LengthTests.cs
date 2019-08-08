@@ -274,6 +274,20 @@ namespace LengthLib.Tests
         }
 
         [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(10.5)]
+        public void IncrementOperator_IncrementInPlace_ChangesOriginalValue(double a)
+        {
+            double expected = a;
+            expected++;
+            Length l1 = new Length(a);
+            l1++;
+
+            Assert.Equal(expected, l1.Value);
+        }
+
+        [Theory]
         [InlineData(1)]
         [InlineData(1.5)]
         [InlineData(123.45)]
@@ -314,6 +328,20 @@ namespace LengthLib.Tests
         {
             Length l1 = new Length(a);
             Assert.Throws<ArgumentException>(() => --l1);
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(1000)]
+        [InlineData(10.5)]
+        public void DecrementOperator_DecrementInPlace_ChangesOriginalValue(double a)
+        {
+            double expected = a;
+            expected--;
+            Length l1 = new Length(a);
+            l1--;
+
+            Assert.Equal(expected, l1.Value);
         }
         #endregion
 
